@@ -16,33 +16,37 @@ ollama pull llama3.1:8b
 
 Keep Ollama running while using the app. The app connects from the browser directly to `http://localhost:11434`; resume and job-description text are not sent to this project's web server.
 
-## Run locally
+## Run the hosted website with local Ollama
 
-1. Install Ollama and download the model as above.
-2. Allow the local app origin in Ollama's `OLLAMA_ORIGINS` setting. For the development URL below, add `http://localhost:3000`.
-3. Start the static development server:
+1. Install Ollama on the device running your browser and download the model:
+
+   ```sh
+   ollama pull llama3.1:8b
+   ```
+
+2. On Windows, allow the hosted website's exact origin in Ollama. In PowerShell, run:
+
+   ```powershell
+   setx OLLAMA_ORIGINS "https://www.interview-prep.online"
+   ```
+
+   If `OLLAMA_ORIGINS` already has values, add this origin to the existing list instead of replacing it.
+3. Completely quit Ollama from the system tray, then start it again so the setting takes effect.
+4. Visit <https://www.interview-prep.online>. When your browser asks, allow the website to connect to local applications.
+
+## Run both the website and Ollama locally
+
+1. Install Ollama and download the `llama3.1:8b` model as described above.
+2. Allow the development site's origin in Ollama's `OLLAMA_ORIGINS` setting: `http://localhost:3000`. On Windows, add it to the existing value if one is already set, then completely quit and restart Ollama.
+3. Start the static development server from the project directory:
 
    ```sh
    node dev-server.js
    ```
 
-4. Open <http://localhost:3000>.
+4. Open <http://localhost:3000>. If your browser asks, allow the site to connect to local applications.
 
 Ollama's default API listens only on the local machine, which is what this app expects. Do not expose port `11434` to the public internet. For platform-specific environment-variable instructions, see [Ollama's FAQ](https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama).
-
-## Deploy as a static website
-
-The site has no build step or server-side inference API. Deploy the repository's static files (`index.html`, `app.js`, and `styles.css`) to Vercel, GitHub Pages, or another static host. Visitors must install Ollama and download the model themselves.
-
-For the deployed site, each visitor must allow the site's exact origin in their Ollama `OLLAMA_ORIGINS` setting and restart Ollama. For example, for a Vercel URL, allow `https://your-project.vercel.app` (or your custom domain). Do not use a wildcard origin for a public website. Ollama origin settings are configured on the visitor's device, not as a Vercel environment variable. Depending on the browser, the visitor may also need to approve a prompt allowing the site to connect to local applications.
-
-On Windows, one way to set the origin is to open PowerShell and run:
-
-```powershell
-setx OLLAMA_ORIGINS "https://www.interview-prep.online"
-```
-
-Replace the example with the exact site origin, fully quit Ollama from the system tray, then start Ollama again. If `OLLAMA_ORIGINS` already has values, add the site origin to the existing list instead of replacing it. The deployment's Vercel preview URLs are different origins; use a stable production URL or add the exact preview origin when needed.
 
 ## Privacy and scoring disclosure
 

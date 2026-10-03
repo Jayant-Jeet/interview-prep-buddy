@@ -40,11 +40,35 @@
 
         <section class="workspace">
           <aside class="ollama-setup-note" aria-labelledby="ollama-setup-heading">
-            <h2 id="ollama-setup-heading">One-time Ollama setup</h2>
-            <p>Install Ollama, then download the model this app uses:</p>
-            <code>ollama pull llama3.1:8b</code>
-            <p>For this hosted site, allow its exact website origin in Ollama's <code>OLLAMA_ORIGINS</code> setting and restart Ollama. Your browser may also ask permission to connect to local apps. <a href="https://docs.ollama.com/faq" target="_blank" rel="noopener noreferrer">See Ollama's setup instructions</a>.</p>
+            <div class="ollama-setup-heading">
+              <h2 id="ollama-setup-heading">Choose how to run Interview Prep Buddy</h2>
+              <button id="ollama-setup-close" class="setup-toggle setup-close" type="button" aria-label="Close Ollama setup instructions" title="Close setup">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <p>Both options need Ollama running on the device using the browser and the <code>llama3.1:8b</code> model:</p>
+            <code class="setup-command">ollama pull llama3.1:8b</code>
+            <div class="ollama-run-options">
+              <section class="ollama-run-option" aria-labelledby="hosted-ollama-heading">
+                <h3 id="hosted-ollama-heading">1. Hosted website + local Ollama</h3>
+                <ol>
+                  <li>On Windows, allow <code>https://www.interview-prep.online</code> in PowerShell:<br><code class="setup-command">setx OLLAMA_ORIGINS "https://www.interview-prep.online"</code></li>
+                  <li>Completely quit Ollama from the system tray, then restart it.</li>
+                  <li>Visit <a href="https://www.interview-prep.online">the hosted website</a> and allow the browser prompt to connect to local apps.</li>
+                </ol>
+              </section>
+              <section class="ollama-run-option" aria-labelledby="local-ollama-heading">
+                <h3 id="local-ollama-heading">2. Website + Ollama both local</h3>
+                <ol>
+                  <li>Allow <code>http://localhost:3000</code> in Ollama's <code>OLLAMA_ORIGINS</code> setting. Add it to any existing values, then quit and restart Ollama.</li>
+                  <li>In the project directory, start the site: <code class="setup-command">node dev-server.js</code></li>
+                  <li>Open <a href="http://localhost:3000">http://localhost:3000</a> and allow the browser prompt to connect to local apps.</li>
+                </ol>
+              </section>
+            </div>
+            <p><a href="https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama" target="_blank" rel="noopener noreferrer">See Ollama's instructions for allowing web origins</a>.</p>
           </aside>
+          <button id="ollama-setup-open" class="setup-toggle setup-reopen" type="button" hidden>Show Ollama setup</button>
 
           <form id="profile-form" novalidate>
             <div class="input-grid">
