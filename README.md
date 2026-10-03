@@ -58,5 +58,4 @@ The interface supports keyboard navigation, visible focus states, labelled contr
 ## Resume upload
 
 - Upload supported formats: `.doc`, `.docx`, `.pdf`
-- The app extracts text locally into the resume field so you can edit before starting.
 - Legacy `.doc` extraction can vary by file encoding; if text quality is poor, save as `.docx` and retry.
