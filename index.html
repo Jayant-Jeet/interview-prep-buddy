@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f7f3">
-    <meta name="description" content="Private, practical mock interview practice tailored to your resume and target role.">
+    <meta name="description" content="Private mock interview practice powered by Ollama running on your own device.">
     <title>Interview Prep Buddy</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
@@ -22,17 +22,24 @@
             <span>Interview Prep Buddy</span>
           </a>
           <div class="topbar-meta">
-            <div class="privacy-chip"><span class="privacy-dot" aria-hidden="true"></span> Private &amp; Secure</div>
+            <div class="privacy-chip"><span class="privacy-dot" aria-hidden="true"></span> Runs on your device</div>
           </div>
         </header>
 
         <section class="intro" aria-labelledby="materials-heading">
           <span class="eyebrow">SETUP</span>
           <h1 id="materials-heading">Create your interview context</h1>
-          <p>Upload your resume and paste the role to generate a private, local mock interview question bank.</p>
+          <p>Upload your resume and paste the role to generate interview questions with Ollama running on your device.</p>
         </section>
 
         <section class="workspace">
+          <aside class="ollama-setup-note" aria-labelledby="ollama-setup-heading">
+            <h2 id="ollama-setup-heading">One-time Ollama setup</h2>
+            <p>Install Ollama, then download the model this app uses:</p>
+            <code>ollama pull llama3.1:8b</code>
+            <p>For this hosted site, allow its exact website origin in Ollama's <code>OLLAMA_ORIGINS</code> setting and restart Ollama. Your browser may also ask permission to connect to local apps. <a href="https://docs.ollama.com/faq" target="_blank" rel="noopener noreferrer">See Ollama's setup instructions</a>.</p>
+          </aside>
+
           <form id="profile-form" novalidate>
             <div class="input-grid">
               <div class="input-card resume-card">
@@ -79,8 +86,8 @@
             </div>
 
             <div class="form-footer">
-              <p class="local-note"><span aria-hidden="true">*</span>Processed locally. Nothing is uploaded or saved.</p>
-              <p id="llm-indicator" class="llm-indicator llm-checking" role="status" aria-live="polite">Checking local Llama status...</p>
+              <p class="local-note">Your resume and job description are sent directly from your browser to Ollama on this device. This website does not receive or save them.</p>
+              <p id="llm-indicator" class="llm-indicator llm-checking" role="status" aria-live="polite">Checking Ollama on this device...</p>
               <p id="insights-loading" class="loading-inline" role="status" aria-live="polite" hidden>
                 <span class="loading-spinner" aria-hidden="true"></span>
                 Building your question bank...
@@ -162,7 +169,7 @@
             </section>
           </div>
 
-          <p class="disclaimer">Interview Prep Buddy uses a local Llama model plus browser speech APIs and a transparent coaching rubric. It is a practice aid, not a hiring assessment.</p>
+          <p class="disclaimer">Interview Prep Buddy sends your interview context directly to Ollama running on your device, plus browser speech APIs and a transparent coaching rubric. It is a practice aid, not a hiring assessment.</p>
         </section>
       </div>
     </main>

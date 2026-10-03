@@ -160,6 +160,38 @@ h1 {
   border-bottom: 1px solid #edf1ec;
 }
 
+.ollama-setup-note {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 16px;
+  padding: 13px 15px;
+  border: 1px solid #dce8dc;
+  border-radius: 12px;
+  background: #f5faf5;
+  color: #526257;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.ollama-setup-note h2 {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.ollama-setup-note code {
+  width: fit-content;
+  border-radius: 6px;
+  padding: 4px 7px;
+  background: #e9f1e9;
+  color: #294b35;
+  font-size: 12px;
+}
+
+.ollama-setup-note a {
+  color: var(--green-dark);
+  font-weight: 700;
+}
+
 .app-card.has-results .intro,
 .app-card.has-results .workspace {
   display: none;
@@ -404,8 +436,10 @@ h1 {
 }
 
 .local-note {
+  flex: 1 1 100%;
   margin: 0;
   font-size: 12px;
+  line-height: 1.5;
 }
 
 .local-note span {
