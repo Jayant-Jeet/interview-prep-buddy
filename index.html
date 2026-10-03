@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f3">
+    <meta name="description" content="Private, practical mock interview practice tailored to your resume and target role.">
+    <title>Interview Prep Buddy</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <main id="main">
+      <div class="app-card">
+        <header class="topbar">
+          <a class="brand" href="#" aria-label="Interview Prep Buddy home">
+            <span class="brand-mark" aria-hidden="true">i</span>
+            <span>Interview Prep Buddy</span>
+          </a>
+          <div class="topbar-meta">
+            <div class="privacy-chip"><span class="privacy-dot" aria-hidden="true"></span> Private &amp; Secure</div>
+          </div>
+        </header>
+
+        <section class="intro" aria-labelledby="materials-heading">
+          <span class="eyebrow">SETUP</span>
+          <h1 id="materials-heading">Create your interview context</h1>
+          <p>Upload your resume and paste the role to generate a private, local mock interview question bank.</p>
+        </section>
+
+        <section class="workspace">
+          <form id="profile-form" novalidate>
+            <div class="input-grid">
+              <div class="input-card resume-card">
+                <div class="card-heading-row">
+                  <span class="input-label"><span class="field-icon resume-icon" aria-hidden="true">R</span> Resume</span>
+                  <span class="card-pill">Local parsing</span>
+                </div>
+                <span class="input-hint">Upload .doc, .docx, or .pdf. Extracted text stays local.</span>
+
+                <div class="resume-upload-shell">
+                  <input id="resume-file" class="file-upload-input" name="resumeFile" type="file" accept=".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf" aria-describedby="resume-file-status resume-error">
+
+                  <div id="resume-dropzone" class="resume-dropzone" tabindex="0" role="button" aria-label="Upload your resume file" aria-controls="resume-file">
+                    <div class="dropzone-icon" aria-hidden="true">⇪</div>
+                    <div class="dropzone-copy">
+                      <strong>Drop a resume here</strong>
+                      <span>or choose a file</span>
+                    </div>
+                    <button type="button" class="secondary-button file-trigger" data-target="resume-file">Choose file</button>
+                  </div>
+
+                  <div id="resume-file-summary" class="resume-file-summary" aria-live="polite">
+                    <div class="resume-file-text">
+                      <span id="resume-file-name" class="resume-file-name">No file selected</span>
+                      <span id="resume-file-meta" class="resume-file-meta">PDF, DOCX, or DOC</span>
+                    </div>
+                    <button type="button" id="resume-clear" class="mini-button" aria-label="Remove selected resume">Remove</button>
+                  </div>
+                  <span id="resume-file-status" class="file-status" aria-live="polite">No file selected yet.</span>
+                </div>
+
+                <textarea id="resume-input" name="resume" placeholder="Extracted resume text appears here." maxlength="12000" aria-describedby="resume-error resume-count" hidden aria-hidden="true"></textarea>
+                <span class="field-meta"><span id="resume-error" class="field-error" aria-live="polite"></span><span id="resume-count" class="visually-hidden">0 / 12,000</span></span>
+              </div>
+
+              <label class="input-card role-card" for="job-input">
+                <div class="card-heading-row">
+                  <span class="input-label"><span class="field-icon role-icon" aria-hidden="true">J</span> Job Description</span>
+                </div>
+                <span class="input-hint">Paste the role you are targeting.</span>
+                <textarea id="job-input" name="jobDescription" placeholder="Paste the job description..." maxlength="12000" aria-describedby="job-error job-count"></textarea>
+                <span class="field-meta"><span id="job-error" class="field-error" aria-live="polite"></span><span id="job-count">0 / 12,000</span></span>
+              </label>
+            </div>
+
+            <div class="form-footer">
+              <p class="local-note"><span aria-hidden="true">*</span>Processed locally. Nothing is uploaded or saved.</p>
+              <p id="llm-indicator" class="llm-indicator llm-checking" role="status" aria-live="polite">Checking local Llama status...</p>
+              <p id="insights-loading" class="loading-inline" role="status" aria-live="polite" hidden>
+                <span class="loading-spinner" aria-hidden="true"></span>
+                Building your question bank...
+              </p>
+              <button class="primary-button" type="submit">Start mock interview <span aria-hidden="true">-></span></button>
+            </div>
+            <p id="form-error" class="form-error" role="alert"></p>
+          </form>
+        </section>
+
+        <section id="results" class="results" aria-labelledby="plan-heading" hidden>
+          <div class="results-top">
+            <div>
+              <span class="eyebrow">INTERVIEW READY</span>
+              <p id="role-summary" class="results-subtitle"></p>
+            </div>
+            <button class="secondary-button" id="edit-profile" type="button">Edit input</button>
+          </div>
+
+          <div class="results-grid">
+            <section class="bank-column" aria-labelledby="plan-heading">
+              <div class="column-title-row">
+                <h2 id="plan-heading">Question Bank</h2>
+                <span id="question-count" class="question-count"></span>
+              </div>
+
+              <article class="insight-card strengths-card">
+                <div class="card-heading">
+                  <h3>Key Strengths</h3>
+                </div>
+                <div id="strength-list" class="tag-list"></div>
+                <p id="strength-empty" class="empty-note" hidden>We couldn't match specific strengths yet.</p>
+              </article>
+
+              <article class="insight-card gaps-card">
+                <div class="card-heading">
+                  <h3>Practice Focus Areas</h3>
+                </div>
+                <div id="gap-list" class="tag-list"></div>
+                <p id="gap-empty" class="empty-note" hidden>Great overlap. Push for more depth in examples.</p>
+              </article>
+
+              <div class="insight-card tips-card">
+                <div class="card-heading">
+                  <h3>Interview Tips</h3>
+                </div>
+                <p class="tips-copy">Choose a question, answer with STAR structure, and quantify impact when possible.</p>
+              </div>
+
+              <h3 class="question-list-heading">Interview Questions</h3>
+              <ul id="question-list" class="question-list" aria-label="Question bank"></ul>
+            </section>
+
+            <section class="mock-column" aria-labelledby="practice-heading">
+              <h2 id="practice-heading" tabindex="-1">Mock Interview</h2>
+
+              <div class="answer-panel">
+                <h3 id="selected-question">Choose a question to begin</h3>
+                <p id="voice-status" class="voice-status" aria-live="polite">Ready. Select a question, then ask it with voice.</p>
+                <div class="voice-controls">
+                  <button id="ask-button" type="button" class="secondary-button" disabled>Ask with AI Voice</button>
+                  <button id="record-button" type="button" class="secondary-button" disabled>Record Your Answer</button>
+                </div>
+                <label class="visually-hidden" for="answer-input">Interview response transcript</label>
+                <textarea id="answer-input" placeholder="Your spoken response transcript will appear here. You can also type or edit manually." maxlength="5000" disabled aria-describedby="answer-help answer-count"></textarea>
+                <div class="answer-meta"><span id="answer-help">Speak naturally, then score your response.</span><span id="answer-count">0 / 5,000</span></div>
+                <button id="feedback-button" type="button" class="primary-button feedback-button" disabled>Score this response <span aria-hidden="true">-></span></button>
+                <p id="scoring-loading" class="loading-inline loading-inline-compact" role="status" aria-live="polite" hidden>
+                  <span class="loading-spinner" aria-hidden="true"></span>
+                  Scoring your response...
+                </p>
+              </div>
+
+              <section id="feedback-shell" class="feedback-shell" aria-label="Response feedback" hidden>
+                <h3 class="feedback-shell-title">Response Feedback</h3>
+                <p id="answer-error" class="answer-error" role="alert"></p>
+                <div id="feedback" class="feedback" aria-live="polite" hidden></div>
+              </section>
+            </section>
+          </div>
+
+          <p class="disclaimer">Interview Prep Buddy uses a local Llama model plus browser speech APIs and a transparent coaching rubric. It is a practice aid, not a hiring assessment.</p>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
