@@ -39,7 +39,7 @@ For the deployed site, each visitor must allow the site's exact origin in their 
 On Windows, one way to set the origin is to open PowerShell and run:
 
 ```powershell
-setx OLLAMA_ORIGINS "https://your-project.vercel.app"
+setx OLLAMA_ORIGINS "https://www.interview-prep.online"
 ```
 
 Replace the example with the exact site origin, fully quit Ollama from the system tray, then start Ollama again. If `OLLAMA_ORIGINS` already has values, add the site origin to the existing list instead of replacing it. The deployment's Vercel preview URLs are different origins; use a stable production URL or add the exact preview origin when needed.
