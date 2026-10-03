@@ -5,6 +5,9 @@ const INSIGHTS_TIMEOUT_MS = 45000;
 
 const form = document.querySelector("#profile-form");
 const appCard = document.querySelector(".app-card");
+const ollamaSetupNote = document.querySelector(".ollama-setup-note");
+const ollamaSetupCloseButton = document.querySelector("#ollama-setup-close");
+const ollamaSetupOpenButton = document.querySelector("#ollama-setup-open");
 const resumeInput = document.querySelector("#resume-input");
 const resumeFileInput = document.querySelector("#resume-file");
 const resumeFileStatus = document.querySelector("#resume-file-status");
@@ -50,6 +53,16 @@ let pdfWorkerConfigured = false;
 let pdfLoaderPromise = null;
 
 submitButton.disabled = true;
+ollamaSetupCloseButton.addEventListener("click", () => {
+  ollamaSetupNote.hidden = true;
+  ollamaSetupOpenButton.hidden = false;
+  ollamaSetupOpenButton.focus();
+});
+ollamaSetupOpenButton.addEventListener("click", () => {
+  ollamaSetupNote.hidden = false;
+  ollamaSetupOpenButton.hidden = true;
+  ollamaSetupCloseButton.focus();
+});
 if (feedbackShell) {
   feedbackShell.hidden = true;
 }

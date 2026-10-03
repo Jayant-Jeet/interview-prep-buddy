@@ -162,7 +162,7 @@ h1 {
 
 .ollama-setup-note {
   display: grid;
-  gap: 7px;
+  gap: 9px;
   margin-bottom: 16px;
   padding: 13px 15px;
   border: 1px solid #dce8dc;
@@ -173,18 +173,107 @@ h1 {
   line-height: 1.55;
 }
 
+.ollama-setup-note[hidden],
+.setup-reopen[hidden] {
+  display: none;
+}
+
+.ollama-setup-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .ollama-setup-note h2 {
   color: var(--ink);
   font-size: 14px;
 }
 
+.setup-toggle {
+  flex: 0 0 auto;
+  border: 1px solid #cbdccd;
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: #fff;
+  color: var(--green-dark);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.setup-toggle:hover {
+  background: #e9f1e9;
+}
+
+.setup-toggle:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+.setup-close {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b42318;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.setup-close:hover {
+  background: transparent;
+  color: #912018;
+}
+
+.setup-reopen {
+  margin: 0 0 16px;
+}
+
+.ollama-run-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ollama-run-option {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #dce8dc;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.ollama-run-option h3 {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.ollama-run-option ol {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.ollama-run-option li + li {
+  margin-top: 4px;
+}
+
 .ollama-setup-note code {
-  width: fit-content;
   border-radius: 6px;
   padding: 4px 7px;
   background: #e9f1e9;
   color: #294b35;
   font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.ollama-setup-note .setup-command {
+  display: inline-block;
+  width: fit-content;
 }
 
 .ollama-setup-note a {
@@ -926,6 +1015,7 @@ h2 {
   .results,
   .intro { padding-left: 16px; padding-right: 16px; }
   .input-grid { grid-template-columns: 1fr; }
+  .ollama-run-options { grid-template-columns: 1fr; }
   .voice-controls { grid-template-columns: 1fr; }
   .file-trigger, .primary-button, .llm-indicator { width: 100%; }
 }
