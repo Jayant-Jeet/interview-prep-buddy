@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f6f7f3">
+    <meta name="theme-color" content="#0d1411">
     <meta name="description" content="Private mock interview practice powered by Ollama running on your own device.">
     <title>Interview Prep Buddy</title>
     <link rel="stylesheet" href="styles.css">
@@ -29,7 +29,7 @@
     <main id="main">
       <div class="app-card">
         <header class="topbar">
-          <a class="brand" href="#" aria-label="Interview Prep Buddy home">
+          <a class="brand" href="#welcome-screen" aria-label="Interview Prep Buddy home">
             <span class="brand-mark" aria-hidden="true">i</span>
             <span>Interview Prep Buddy</span>
           </a>
@@ -38,52 +38,105 @@
           </div>
         </header>
 
-        <section class="intro" aria-labelledby="materials-heading">
-          <span class="eyebrow">SETUP</span>
-          <h1 id="materials-heading">Create your interview context</h1>
-          <p>Upload your resume and paste the role to generate interview questions with Ollama running on your device.</p>
+        <section id="welcome-screen" class="app-screen welcome-screen" aria-labelledby="welcome-heading">
+          <div class="welcome-copy">
+            <span class="eyebrow">INTERVIEW PREP, ON YOUR MACHINE</span>
+            <h1 id="welcome-heading" tabindex="-1">Practice interviews with a <span>coach that knows your story.</span></h1>
+          <br></br>
+            <p>Upload your resume and target role, get a tailored question bank, and rehearse out loud with instant feedback, all locally.</p>
+            <button id="get-started" class="primary-button" type="button">Get started</button>
+          </div>
+
+          <div class="welcome-steps" aria-label="How it works">
+            <article class="welcome-step">
+              <span class="step-number">1</span>
+              <h2>Upload your resume</h2>
+              <p>Add your resume and the job description you're targeting. Everything is processed on your device.</p>
+            </article>
+            <article class="welcome-step">
+              <span class="step-number">2</span>
+              <h2>Get your question bank</h2>
+              <p>We generate interview questions grounded in your experience and the role's requirements.</p>
+            </article>
+            <article class="welcome-step">
+              <span class="step-number">3</span>
+              <h2>Practice &amp; get feedback</h2>
+              <p>Rehearse out loud or type your answer, then get a transparent rubric score and focused tips.</p>
+            </article>
+          </div>
+
+          <div class="welcome-features" aria-label="Interview Prep Buddy benefits">
+            <div class="welcome-feature"><span aria-hidden="true">🔒</span> Runs locally &amp; private</div>
+            <div class="welcome-feature"><span aria-hidden="true">🎙️</span> Voice practice</div>
+            <div class="welcome-feature"><span aria-hidden="true">📊</span> Transparent scoring</div>
+          </div>
         </section>
 
-        <section class="workspace">
-          <aside class="ollama-setup-note" aria-labelledby="ollama-setup-heading">
-            <div class="ollama-setup-heading">
-              <h2 id="ollama-setup-heading">Choose how to run Interview Prep Buddy</h2>
-              <button id="ollama-setup-close" class="setup-toggle setup-close" type="button" aria-label="Close Ollama setup instructions" title="Close setup">
-                <span aria-hidden="true">×</span>
-              </button>
+        <section id="llm-setup-screen" class="app-screen setup-screen" aria-labelledby="setup-heading" hidden>
+          <div class="setup-screen-heading">
+            <div>
+              <h1 id="setup-heading" tabindex="-1">Local LLM <span>Setup</span></h1>
+              <p>Follow these steps to run the Llama 3.1 model locally with Interview Prep Buddy.</p>
             </div>
-            <p>Both options need Ollama running on the device using the browser and the <code>llama3.1:8b</code> model:</p>
-            <code class="setup-command">ollama pull llama3.1:8b</code>
-            <div class="ollama-run-options">
-              <section class="ollama-run-option" aria-labelledby="hosted-ollama-heading">
-                <h3 id="hosted-ollama-heading">1. Hosted website + local Ollama</h3>
-                <ol>
-                  <li>On Windows, allow <code>https://www.interview-prep.online</code> in PowerShell:<br><code class="setup-command">setx OLLAMA_ORIGINS "https://www.interview-prep.online"</code></li>
-                  <li>Completely quit Ollama from the system tray, then restart it.</li>
-                  <li>Visit <a href="https://www.interview-prep.online">the hosted website</a> and allow the browser prompt to connect to local apps.</li>
-                </ol>
-              </section>
-              <section class="ollama-run-option" aria-labelledby="local-ollama-heading">
-                <h3 id="local-ollama-heading">2. Website + Ollama both local</h3>
-                <ol>
-                  <li>Allow <code>http://localhost:3000</code> in Ollama's <code>OLLAMA_ORIGINS</code> setting. Add it to any existing values, then quit and restart Ollama.</li>
-                  <li>In the project directory, start the site: <code class="setup-command">node dev-server.js</code></li>
-                  <li>Open <a href="http://localhost:3000">http://localhost:3000</a> and allow the browser prompt to connect to local apps.</li>
-                </ol>
-              </section>
-            </div>
-            <p><a href="https://docs.ollama.com/faq#how-can-i-allow-additional-web-origins-to-access-ollama" target="_blank" rel="noopener noreferrer">See Ollama's instructions for allowing web origins</a>.</p>
-          </aside>
-          <button id="ollama-setup-open" class="setup-toggle setup-reopen" type="button" hidden>Show Ollama setup</button>
+            <p id="llm-indicator" class="llm-indicator llm-checking" role="status" aria-live="polite">Checking Ollama on this device...</p>
+          </div>
+
+          <div class="setup-steps">
+            <article class="setup-step">
+              <span class="step-number">1</span>
+              <div>
+                <h2>Install Ollama</h2>
+                <p>Follow the instructions on the <a href="https://ollama.com" target="_blank" rel="noopener">Ollama website</a> to install Ollama on your device.</p>
+              </div>
+            </article>
+            <article class="setup-step">
+              <span class="step-number">2</span>
+              <div>
+                <h2>Download the model</h2>
+                <p>Pull the model to your device:</p>
+                <code>ollama pull llama3.1:8b</code>
+              </div>
+            </article>
+            <article class="setup-step">
+              <span class="step-number">3</span>
+              <div>
+                <h2>Authorize Interview Prep Buddy</h2>
+                <p>Allow the origin where you opened the app in Ollama's <code>OLLAMA_ORIGINS</code> setting:</p>
+                <div class="origin-commands">
+                  <code>setx OLLAMA_ORIGINS "https://www.interview-prep.online"</code>
+                </div>
+                <p class="setup-note">Keep any existing origins in the value. On Windows, fully quit Ollama from the system tray and restart it after changing this setting.</p>
+              </div>
+            </article>
+            <article class="setup-step">
+              <span class="step-number">4</span>
+              <div>
+                <h2>Restart Ollama</h2>
+                <p>Fully quit Ollama from your system tray, then restart it.</p>
+              </div>
+            </article>
+          </div>
+
+          <button id="continue-profile" class="primary-button setup-continue" type="button">Continue to profile setup</button>
+        </section>
+
+        <section id="profile-screen" class="app-screen profile-screen" aria-labelledby="materials-heading" hidden>
+          <section class="intro">
+            <span class="eyebrow">STEP 1 · YOUR PROFILE</span>
+            <h1 id="materials-heading" tabindex="-1">Upload your resume and <span>target role.</span></h1>
+            <p>We tailor your question bank to your experience and the job you're going after. Everything stays on your machine.</p>
+          </section>
+
+          <section class="workspace">
 
           <form id="profile-form" novalidate>
             <div class="input-grid">
               <div class="input-card resume-card">
                 <div class="card-heading-row">
-                  <span class="input-label"><span class="field-icon resume-icon" aria-hidden="true">R</span> Resume</span>
+                  <span class="input-label">Resume</span>
                   <span class="card-pill">Local parsing</span>
                 </div>
-                <span class="input-hint">Upload .doc, .docx, or .pdf. Extracted text stays local.</span>
+                <span class="input-hint">Upload .doc, .docx, or .pdf. Drag it in or click to browse.</span>
 
                 <div class="resume-upload-shell">
                   <input id="resume-file" class="file-upload-input" name="resumeFile" type="file" accept=".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf" aria-describedby="resume-file-status resume-error">
@@ -113,46 +166,52 @@
 
               <label class="input-card role-card" for="job-input">
                 <div class="card-heading-row">
-                  <span class="input-label"><span class="field-icon role-icon" aria-hidden="true">J</span> Job Description</span>
+                  <span class="input-label">Target Role</span>
                 </div>
-                <span class="input-hint">Paste the role you are targeting.</span>
-                <textarea id="job-input" name="jobDescription" placeholder="Paste the job description..." maxlength="12000" aria-describedby="job-error job-count"></textarea>
+                <span class="input-hint">Paste the job description you are preparing for.</span>
+                <textarea id="job-input" name="jobDescription" placeholder="Paste the job description here..." maxlength="12000" aria-describedby="job-error job-count"></textarea>
                 <span class="field-meta"><span id="job-error" class="field-error" aria-live="polite"></span><span id="job-count">0 / 12,000</span></span>
               </label>
             </div>
 
             <div class="form-footer">
               <p class="local-note">Your resume and job description are sent directly from your browser to Ollama on this device. This website does not receive or save them.</p>
-              <p id="llm-indicator" class="llm-indicator llm-checking" role="status" aria-live="polite">Checking Ollama on this device...</p>
               <p id="insights-loading" class="loading-inline" role="status" aria-live="polite" hidden>
                 <span class="loading-spinner" aria-hidden="true"></span>
                 Building your question bank...
               </p>
-              <button class="primary-button" type="submit">Start mock interview <span aria-hidden="true">-></span></button>
+              <button class="primary-button" type="submit">Generate question bank</button>
             </div>
             <p id="form-error" class="form-error" role="alert"></p>
           </form>
+          </section>
         </section>
 
-        <section id="results" class="results" aria-labelledby="plan-heading" hidden>
+        <section id="results" class="app-screen results" aria-labelledby="plan-heading" hidden>
           <div class="results-top">
             <div>
-              <span class="eyebrow">INTERVIEW READY</span>
-              <p id="role-summary" class="results-subtitle"></p>
+              <span class="eyebrow">BASED ON YOUR PROFILE</span>
+              <h2 id="results-heading">Your question bank</h2>
+              <p id="role-summary" class="results-subtitle visually-hidden"></p>
             </div>
-            <button class="secondary-button" id="edit-profile" type="button">Edit input</button>
+            <div class="results-controls">
+              <label class="visually-hidden" for="topic-filter">Filter questions by topic</label>
+              <select id="topic-filter" class="topic-filter">
+                <option value="all">All topics</option>
+              </select>
+              <button class="secondary-button" id="edit-profile" type="button">Edit input</button>
+            </div>
           </div>
 
           <div class="results-grid">
             <section class="bank-column" aria-labelledby="plan-heading">
-              <div class="column-title-row">
-                <h2 id="plan-heading">Question Bank</h2>
-                <span id="question-count" class="question-count"></span>
-              </div>
+              <h2 id="plan-heading" class="visually-hidden">Interview questions</h2>
+              <span id="question-count" class="visually-hidden"></span>
 
               <article class="insight-card strengths-card">
                 <div class="card-heading">
-                  <h3>Key Strengths</h3>
+                  <span class="insight-kicker">LIKELY STRENGTHS</span>
+                  <h3>Build confidence here</h3>
                 </div>
                 <div id="strength-list" class="tag-list"></div>
                 <p id="strength-empty" class="empty-note" hidden>We couldn't match specific strengths yet.</p>
@@ -160,33 +219,39 @@
 
               <article class="insight-card gaps-card">
                 <div class="card-heading">
-                  <h3>Practice Focus Areas</h3>
+                  <span class="insight-kicker">PRACTICE OPPORTUNITIES</span>
+                  <h3>Sharpen these areas</h3>
                 </div>
                 <div id="gap-list" class="tag-list"></div>
                 <p id="gap-empty" class="empty-note" hidden>Great overlap. Push for more depth in examples.</p>
               </article>
 
-              <div class="insight-card tips-card">
+              <div class="insight-card tips-card" hidden>
                 <div class="card-heading">
                   <h3>Interview Tips</h3>
                 </div>
                 <p class="tips-copy">Choose a question, answer with STAR structure, and quantify impact when possible.</p>
               </div>
 
-              <h3 class="question-list-heading">Interview Questions</h3>
+              <h3 class="question-list-heading visually-hidden">Question list</h3>
               <ul id="question-list" class="question-list" aria-label="Question bank"></ul>
             </section>
 
             <section class="mock-column" aria-labelledby="practice-heading">
-              <h2 id="practice-heading" tabindex="-1">Mock Interview</h2>
+              <div class="mock-heading-top">
+                <span class="eyebrow">AI MOCK INTERVIEW</span>
+                <span class="live-coach">● LIVE COACH</span>
+              </div>
+              <h2 id="practice-heading" tabindex="-1">Practice out loud</h2>
 
               <div class="answer-panel">
                 <h3 id="selected-question">Choose a question to begin</h3>
                 <p id="voice-status" class="voice-status" aria-live="polite">Ready. Select a question, then ask it with voice.</p>
                 <div class="voice-controls">
-                  <button id="ask-button" type="button" class="secondary-button" disabled>Ask with AI Voice</button>
-                  <button id="record-button" type="button" class="secondary-button" disabled>Record Your Answer</button>
+                  <button id="ask-button" type="button" class="secondary-button" disabled>Ask with AI voice</button>
+                  <button id="record-button" type="button" class="secondary-button" disabled>Record response</button>
                 </div>
+                <br></br>
                 <label class="visually-hidden" for="answer-input">Interview response transcript</label>
                 <textarea id="answer-input" placeholder="Your spoken response transcript will appear here. You can also type or edit manually." maxlength="5000" disabled aria-describedby="answer-help answer-count"></textarea>
                 <div class="answer-meta"><span id="answer-help">Speak naturally, then score your response.</span><span id="answer-count">0 / 5,000</span></div>

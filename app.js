@@ -4,10 +4,9 @@ const OLLAMA_MODEL = "llama3.1:8b";
 const INSIGHTS_TIMEOUT_MS = 45000;
 
 const form = document.querySelector("#profile-form");
-const appCard = document.querySelector(".app-card");
-const ollamaSetupNote = document.querySelector(".ollama-setup-note");
-const ollamaSetupCloseButton = document.querySelector("#ollama-setup-close");
-const ollamaSetupOpenButton = document.querySelector("#ollama-setup-open");
+const appScreens = Array.from(document.querySelectorAll(".app-screen"));
+const topicFilter = document.querySelector("#topic-filter");
+const continueProfileButton = document.querySelector("#continue-profile");
 const resumeInput = document.querySelector("#resume-input");
 const resumeFileInput = document.querySelector("#resume-file");
 const resumeFileStatus = document.querySelector("#resume-file-status");
@@ -53,16 +52,33 @@ let pdfWorkerConfigured = false;
 let pdfLoaderPromise = null;
 
 submitButton.disabled = true;
-ollamaSetupCloseButton.addEventListener("click", () => {
-  ollamaSetupNote.hidden = true;
-  ollamaSetupOpenButton.hidden = false;
-  ollamaSetupOpenButton.focus();
+continueProfileButton.disabled = true;
+
+function showScreen(screenId, focusSelector) {
+  appScreens.forEach((screen) => {
+    screen.hidden = screen.id !== screenId;
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (focusSelector) {
+    window.requestAnimationFrame(() => {
+      document.querySelector(focusSelector)?.focus({ preventScroll: true });
+    });
+  }
+}
+
+document.querySelector(".brand").addEventListener("click", (event) => {
+  event.preventDefault();
+  showScreen("welcome-screen", "#welcome-heading");
 });
-ollamaSetupOpenButton.addEventListener("click", () => {
-  ollamaSetupNote.hidden = false;
-  ollamaSetupOpenButton.hidden = true;
-  ollamaSetupCloseButton.focus();
+
+document.querySelector("#get-started").addEventListener("click", () => {
+  showScreen("llm-setup-screen", "#setup-heading");
 });
+
+document.querySelector("#continue-profile").addEventListener("click", () => {
+  showScreen("profile-screen", "#materials-heading");
+});
+
 if (feedbackShell) {
   feedbackShell.hidden = true;
 }
@@ -118,7 +134,11 @@ function renderSkillTags(container, skills, emptySelector) {
 
 function renderQuestions() {
   questionList.replaceChildren();
-  questions.forEach((question, index) => {
+  const visibleQuestions = questions
+    .map((question, index) => ({ question, index }))
+    .filter(({ question }) => topicFilter.value === "all" || question.category === topicFilter.value);
+
+  visibleQuestions.forEach(({ question, index }) => {
     const item = document.createElement("li");
     item.className = "list-enter";
     item.style.setProperty("--enter-delay", `${index * 26}ms`);
@@ -133,6 +153,16 @@ function renderQuestions() {
     questionList.append(item);
   });
 }
+
+function updateTopicFilter() {
+  const selectedTopic = topicFilter.value;
+  const topics = [...new Set(questions.map((question) => question.category).filter(Boolean))];
+  topicFilter.replaceChildren(new Option("All topics", "all"));
+  topics.forEach((topic) => topicFilter.add(new Option(topic, topic)));
+  topicFilter.value = topics.includes(selectedTopic) ? selectedTopic : "all";
+}
+
+topicFilter.addEventListener("change", renderQuestions);
 
 function selectQuestion(questionId) {
   selectedQuestion = questions.find((question) => question.id === questionId) || null;
@@ -185,6 +215,7 @@ function updateLlmIndicator() {
     llmIndicator.textContent = `Llama connected (${llmHealth.model})`;
     llmIndicator.classList.add("llm-ready");
     submitButton.disabled = false;
+    continueProfileButton.disabled = false;
     return;
   }
 
@@ -193,6 +224,7 @@ function updateLlmIndicator() {
     : "Ollama unavailable. Start it and allow this website in OLLAMA_ORIGINS.";
   llmIndicator.classList.add("llm-down");
   submitButton.disabled = true;
+  continueProfileButton.disabled = true;
 }
 
 async function refreshLlmHealth() {
@@ -852,6 +884,7 @@ form.addEventListener("submit", async (event) => {
     questionIdSeed = 0;
     questions = insights.questions.map((question) => createQuestion(question));
     selectedQuestion = null;
+    updateTopicFilter();
     renderQuestions();
 
     document.querySelector("#question-count").textContent = `${questions.length} questions`;
@@ -869,14 +902,14 @@ form.addEventListener("submit", async (event) => {
     feedbackPanel.hidden = true;
 
     setVoiceStatus(`Llama question bank loaded for ${role} (${experienceLevel}).`);
+    if (questions.length) {
+      selectQuestion(questions[0].id);
+    }
 
-    results.hidden = false;
-    appCard.classList.add("has-results");
     results.classList.remove("results-enter");
     void results.offsetWidth;
     results.classList.add("results-enter");
-    results.scrollIntoView({ behavior: "smooth", block: "start" });
-    document.querySelector("#practice-heading").focus({ preventScroll: true });
+    showScreen("results", "#practice-heading");
   } catch (error) {
     document.querySelector("#form-error").textContent = error.message || "We could not build the interview bank. Please try again.";
     await refreshLlmHealth();
@@ -892,10 +925,7 @@ document.querySelector("#edit-profile").addEventListener("click", () => {
   if (isRecording) {
     stopRecording();
   }
-  appCard.classList.remove("has-results");
-  results.hidden = true;
-  resumeFileInput.focus();
-  document.querySelector("#materials-heading").scrollIntoView({ behavior: "smooth", block: "start" });
+  showScreen("profile-screen", "#resume-dropzone");
 });
 
 refreshLlmHealth();
